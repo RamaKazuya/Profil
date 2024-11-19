@@ -1,3 +1,30 @@
+<?php
+// Simulasi kredensial login (bisa dihubungkan dengan database di kasus nyata)
+$valid_username = "Kazuya";
+$valid_password = "126534";
+
+session_start();
+
+// Proses login
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if ($username === $valid_username && $password === $valid_password) {
+        $_SESSION['logged_in'] = true;
+    } else {
+        $error_message = "Username atau password salah!";
+    }
+}
+
+// Logout
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+?>
+
 <!-- HTML (index.html) -->
 <!DOCTYPE html>
 <html lang="en">
@@ -9,6 +36,19 @@
     <script defer src="profil.js"></script>
 </head>
 <body>
+<?php if (!isset($_SESSION['logged_in'])): ?>
+        <div class="login-container">
+            <h2>Login</h2>
+            <?php if (isset($error_message)): ?>
+                <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
+            <?php endif; ?>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    <?php else: ?>
     <div class="header">
         <h1>Muhammad Ade Ramadhani</h1>
         <div class="social">
@@ -182,6 +222,11 @@
     <div id="imageModal" class="modal" onclick="closeModal()">
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImage">
-    </div>   
-    </body>
+    </div>
+    
+    <a href="?logout=true" style="text-decoration: none; color: #007BFF;">Logout</a>
+        </div>
+    <?php endif; ?>
+
+</body>
 </html>
