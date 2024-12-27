@@ -79,3 +79,10 @@ function closeModal() {
     var modal = document.getElementById("imageModal");
     modal.style.display = "none";
 }
+
+        // Menampilkan pesan login sukses selama 2 detik
+        function showLoginMessage() {
+            setTimeout(function() {
+                document.getElementById("loginMessage").style.display = 'none';
+            }, 2000); // Hide setelah 2 detik
+        }
